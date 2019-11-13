@@ -10,7 +10,7 @@ Z3_ast getNodeVariable(Z3_context ctx, int number, int position, int k, int node
     return var;
 }
 
-/*Z3_ast Path_K(Z3_context ctx, Graph* graphs, unsigned int numGraphs, int pathLength){
+Z3_ast Path_K(Z3_context ctx, Graph* graphs, unsigned int numGraphs, int pathLength){
     Z3_ast* kappa1; //il existe au moins une node
     Z3_ast* kappa2; //cette node est a la position j avec 0<j<pathLength
     Z3_ast* kappa3; //pour chaque graphe
@@ -45,4 +45,3 @@ Z3_ast graphsToPathFormula( Z3_context ctx, Graph *graphs,unsigned int numGraphs
     }
     return var;
 }
-*/
