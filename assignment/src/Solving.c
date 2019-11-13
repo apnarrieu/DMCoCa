@@ -10,7 +10,7 @@ Z3_ast getNodeVariable(Z3_context ctx, int number, int position, int k, int node
     return var;
 }
 
-Z3_ast Path_K(Z3_context ctx, Graph* graphs, unsigned int numGraphs, int pathLength){
+Z3_ast Path(Z3_context ctx, Graph* graphs, unsigned int numGraphs, int pathLength){
     Z3_ast* kappa1; //il existe au moins une node
     Z3_ast* kappa2; //cette node est a la position j avec 0<j<pathLength
     Z3_ast* kappa3; //pour chaque graphe
@@ -35,7 +35,22 @@ Z3_ast Path_K(Z3_context ctx, Graph* graphs, unsigned int numGraphs, int pathLen
     return phi1;
 }
 
-Z3_ast graphsToPathFormula( Z3_context ctx, Graph *graphs,unsigned int numGraphs, int pathLength){
+Z3_ast SimplePath(Z3_context ctx, Graph* graphs, unsigned int numGraphs, int pathLength){
+  Z3_ast = phi2;
+  return phi2;
+}
+
+Z3_ast ValidPath(Z3_context ctx, Graph* graphs, unsigned int numGraphs, int pathLength){
+  Z3_ast = phi3;
+  return phi3;
+}
+
+Z3_ast PathLenK(Z3_context ctx, Graph* graphs, unsigned int numGraphs, int pathLength){
+  Z3_ast = phi4;
+  return phi4;
+}
+
+/*Z3_ast graphsToPathFormula( Z3_context ctx, Graph *graphs,unsigned int numGraphs, int pathLength){
     Z3_ast var = NULL;
     for(int i=0; i<numGraphs; i++){
         for(int j=0; i<pathLength; j++){
@@ -44,4 +59,4 @@ Z3_ast graphsToPathFormula( Z3_context ctx, Graph *graphs,unsigned int numGraphs
         }
     }
     return var;
-}
+}*/
