@@ -15,10 +15,10 @@ Z3_ast Path(Z3_context ctx, Graph* graphs, unsigned int numGraphs, int pathLengt
     Z3_ast* kappa2; //cette node est a la position j avec 0<j<pathLength
     Z3_ast* kappa3; //pour chaque graphe
     Z3_ast phi1; //phi1
+    kappa3=malloc(numGraph*sizeof(Z3_ast))
     for(int i=0; i<numGraphs; i++){
-        kappa3=malloc(numGraph*sizeof(Z3_ast))
+      kappa2=malloc(pathLength*sizeof(Z3_ast));
         for(int j=0; i<pathLength; j++){
-            kappa2()
             int len_graph = graphs[i]->numNodes;
             kappa1 = malloc(len_graph*sizeof(Z3_ast));
             for(int n = 0; n<len_graph; n++){
@@ -50,13 +50,29 @@ Z3_ast PathLenK(Z3_context ctx, Graph* graphs, unsigned int numGraphs, int pathL
   return phi4;
 }
 
-/*Z3_ast graphsToPathFormula( Z3_context ctx, Graph *graphs,unsigned int numGraphs, int pathLength){
-    Z3_ast var = NULL;
-    for(int i=0; i<numGraphs; i++){
-        for(int j=0; i<pathLength; j++){
+Z3_ast graphsToPathFormula( Z3_context ctx, Graph *graphs,unsigned int numGraphs, int pathLength){
+    Z3_ast phi;
+    Z3_ast underPhi[4];
+    underPhi[0] = Path(ctx, graphs, numGraphs, pathLength);
+    underPhi[1] = SimplePath(ctx, graphs, numGraphs, pathLength);
+    underPhi[2] = ValidPath(ctx, graphs, numGraphs, pathLength);
+    underPhi[3] = PathLenK(ctx, graphs, numGraphs, pathLength);
+    phi = Z3_mk_and(ctx, 4, underPhi);
+    return phi;
+}
 
-            var = getNodeVariable(ctx, i, j, pathLength, );
-        }
+Z3_ast graphsToFullFormula( Z3_context ctx, Graph *graphs,unsigned int numGraphs){
+  int max_k = graphs[0]->numNodes;
+
+  for(int i=1; i<numGraphs; i++){
+    if(max_k>graphs[i]->numNodes){
+      max_k = graphs[i]->numNodes
     }
-    return var;
-}*/
+  }
+  Z3_ast kappa[max_k];
+  for(int i=0;i<max_k;i++){
+    kappa[i]=graphsToPathFormula(ctx, graphs, numGraphs, i);
+  }
+  Z3_ast phi=Z3_mk_or(ctx, max_k, kappa);
+  return phi;
+}
