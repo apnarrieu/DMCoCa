@@ -75,4 +75,4 @@ doc:
 .PHONY: clean
 clean:
 		rm -f build/*.o *~ parser/Lexer.c parser/Lexer.h parser/Parser.c parser/Parser.h equalPath graphParser Z3Example doc.html
-		rm -rf doc
+		rm -rf doc main
