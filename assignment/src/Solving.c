@@ -12,7 +12,7 @@ Z3_ast getNodeVariable(Z3_context ctx, int number, int position, int k, int node
 
 Z3_ast* allocateAstTab(Z3_ast* tab, int lenTab){
   for(int i=0;i<lenTab;i++){
-    tab[i] = malloc(sizeof(Z3_ast));
+    tab[i] = malloc(sizeof(Z3_ast*));
   }
   return tab;
 }
