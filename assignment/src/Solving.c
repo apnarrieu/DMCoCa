@@ -11,12 +11,18 @@ Z3_ast getNodeVariable(Z3_context ctx, int number, int position, int k, int node
     return var;
 }
 
+void free_tab(void* tab, lentab){
+  for(int i=0; i<lentab; i++){
+    free(tab[i]);
+  }
+}
+
 Z3_ast Path(Z3_context ctx, Graph* graphs, unsigned int numGraphs, int pathLength){
     Z3_ast* kappa1; //il existe au moins une node
     Z3_ast* kappa2; //cette node est a la position j avec 0<j<pathLength
     Z3_ast* kappa3; //pour chaque graphe
     Z3_ast phi1; //phi1
-    kappa3=(Z3_ast*)malloc(sizeof(Z3_ast));
+    kappa3=(Z3_ast*)malloc(numGraphs*sizeof(Z3_ast));
     for(int i=0; i<numGraphs; i++){
       kappa2=(Z3_ast*)malloc(pathLength*sizeof(Z3_ast*));
         for(int j=0; i<pathLength; j++){
@@ -26,13 +32,13 @@ Z3_ast Path(Z3_context ctx, Graph* graphs, unsigned int numGraphs, int pathLengt
                 kappa1[n] = getNodeVariable(ctx, i, j, pathLength, n);
             }
             kappa2[j]=Z3_mk_or(ctx, len_graph, kappa1);
-            free(kappa1);
+            free_tab(kappa1, len_graph);
         }
         kappa3[i]=Z3_mk_and(ctx, pathLength, kappa2);
-        free(kappa2);
+        free_tab(kappa2, pathLength);
     }
     phi1=Z3_mk_and(ctx, numGraphs, kappa3);
-    free(kappa3);
+    free_tab(kappa3,numGraphs);
     return phi1;
 }
 
@@ -57,37 +63,43 @@ Z3_ast SimplePath(Z3_context ctx, Graph* graphs, unsigned int numGraphs, int pat
         }
       }
       kappa2[j]=Z3_mk_and(ctx, len_graph*len_graph, kappa1);
-      free(kappa1);
+      free_tab(kappa1,len_graph*len_graph);
     }
     kappa3[i]=Z3_mk_and(ctx, pathLength, kappa2);
-    free(kappa2);
+    free_tab(kappa2,pathLength);
   }
   phi2 = Z3_mk_and(ctx, numGraphs, kappa3);
-  free(kappa3);
+  free_tab(kappa3,numGraphs);
   return phi2;
 }
 
 Z3_ast ValidPath(Z3_context ctx, Graph* graphs, unsigned int numGraphs, int pathLength){
   Z3_ast* kappa1; //Pour chaque graphe
   Z3_ast* kappa2; //Il existe un chemin allant de j à k
-  Z3_ast* kappa3; //Pour chaque node s (source) et t (destination)
+  Z3_ast* kappa3=(Z3_ast*)malloc(numGraphs*sizeof(Z3_ast));; //Pour chaque node s (source) et t (destination)
   Z3_ast phi3; //phi3
   for(int i=0; i<numGraphs; i++){
-      kappa1 = (Z3_ast*)malloc(numGraphs*sizeof(Z3_ast));
-      kappa2 = (Z3_ast*)malloc(pathLength*sizeof(Z3_ast));
-      kappa3 = (Z3_ast*)malloc(pathLength*sizeof(Z3_ast));
-      for(int j=0; j<pathLength; j++){
-           Z3_ast tmp[2];
-           tmp[0] = getNodeVariable(ctx, i, 0, pathLength, 0);
-           tmp[1] = getNodeVariable(ctx, i, pathLength, pathLength, pathLength);
-           kappa3[j] = Z3_mk_and(ctx, 2, tmp);
+    for(int j=0; j<pathLength; j++){
+      int len_graph = orderG(graphs[i]);
+      kappa1 = (Z3_ast*)malloc(len_graph*len_graph*sizeof(Z3_ast));
+      Z3_ast tmp[2];
+      int iterator = 0;
+      for(int s = 0; s<len_graph; s++){
+        for(int t = q; t<len_graph; t++){
+          tmp[0] = getNodeVariable(ctx, i, 0, pathLength, s);
+          tmp[1] = getNodeVariable(ctx, i, pathLength, pathLength, t);
+          kappa1[iterator] = Z3_mk_and(ctx, 2, tmp);
+          iterator++;
+        }
       }
-      free(kappa3);
-      kappa1[i]=Z3_mk_or(ctx, pathLength, kappa2);
-      free(kappa2);
+      kappa2[j]=Z3_mk_and(ctx, len_graph*len_graph, kappa1);
+      free_tab(kappa1,len_graph*len_graph);
+    }
+    kappa3[i]=Z3_mk_or(ctx, pathLength, kappa2);
+    free_tab(kappa2,pathLength);
   }
-  phi3=Z3_mk_and(ctx, pathLength, kappa1);
-  free(kappa1);
+  phi3=Z3_mk_and(ctx, pathLength, kappa3);
+  free_tab(kappa3,numGraphs);
   return phi3;
 }
 
@@ -104,13 +116,13 @@ Z3_ast PathLenK(Z3_context ctx, Graph* graphs, unsigned int numGraphs, int pathL
         kappa1[j]=getNodeVariable(ctx, i, j, pathLength, q);
       }
       kappa2[i]=Z3_mk_or(ctx, pathLength, kappa1);
-      free(kappa1);
+      free_tab(kappa1, pathLength);
     }
     kappa3[i]=Z3_mk_and(ctx,(orderG(graphs[i])),kappa2);
-    free(kappa2);
+    free_tab(kappa2,orderG(graphs[i]));
   }
   phi4=Z3_mk_and(ctx,numGraphs,kappa3);
-  free(kappa3);
+  free_tab(kappa3,numGraphs);
   return phi4;
 }
 
