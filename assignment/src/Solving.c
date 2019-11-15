@@ -11,7 +11,7 @@ Z3_ast getNodeVariable(Z3_context ctx, int number, int position, int k, int node
     return var;
 }
 
-void free_tab(void* tab, lentab){
+void free_tab(void* tab, int lentab){
   for(int i=0; i<lentab; i++){
     free(tab[i]);
   }
@@ -43,6 +43,7 @@ Z3_ast Path(Z3_context ctx, Graph* graphs, unsigned int numGraphs, int pathLengt
 }
 
 Z3_ast SimplePath(Z3_context ctx, Graph* graphs, unsigned int numGraphs, int pathLength){
+  int len_graph;
   Z3_ast phi2;
   Z3_ast* kappa1;
   Z3_ast* kappa2;
@@ -50,7 +51,7 @@ Z3_ast SimplePath(Z3_context ctx, Graph* graphs, unsigned int numGraphs, int pat
   for(int i=0; i<numGraphs; i++){
     kappa2=(Z3_ast*)malloc(pathLength*sizeof(Z3_ast));
     for(int j=0; j<pathLength; j++){
-      int len_graph = orderG(graphs[i]);
+      len_graph = orderG(graphs[i]);
       kappa1 = (Z3_ast*)malloc(len_graph*len_graph*sizeof(Z3_ast));
       Z3_ast tmp[2];
       int iterator = 0;
