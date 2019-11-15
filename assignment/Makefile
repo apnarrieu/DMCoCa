@@ -27,7 +27,6 @@ parser/Lexer.c:	parser/Lexer.l
 		mv Lexer.c parser/Lexer.c
 		mv Lexer.h parser/Lexer.h
 
-
 parser/Parser.c:	parser/Parser.y parser/Lexer.c
 		bison parser/Parser.y
 		mv Parser.c parser/Parser.c
@@ -52,10 +51,6 @@ build/Z3Example.o: examples/Z3Example.c
 		mkdir -p build
 		$(CC) -c $(CFLAGS) $^ -o $@
 
-build/Solving.o: src/Solving.c
-		mkdir -p build
-		$(CC) -c $(CFLAGS) $^ -o $@
-
 Z3Example: build/Z3Example.o build/Z3Tools.o
 		$(CC) $(CFLAGS) $^ -o $@
 
@@ -63,7 +58,7 @@ build/main.o: src/main.c
 		mkdir -p build
 		$(CC) -c $(CFLAGS) $^ -o $@
 
-main: build/main.o build/Z3Tools.o build/Solving.o
+main: build/main.o build/Z3Tools.o build/Solving.o build/Graph.o build/Lexer.o build/Parser.o $(OBJPARS)
 		$(CC) $(CFLAGS) $^ -o $@
 
 .PHONY: doc

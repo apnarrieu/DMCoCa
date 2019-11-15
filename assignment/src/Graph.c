@@ -6,9 +6,9 @@
 		   Does not contain acces functions for now.
  * @version 0.5
  * @date 2018-11-18, 2019-07-23
- * 
+ *
  * @copyright Creative Commons.
- * 
+ *
  */
 
 
@@ -19,7 +19,7 @@
 
 void printGraph(Graph graph){
 	printf("nodes:\n");
-	for(int i = 0; i<graph.numNodes;i++) printf("%d : %s, ",i,graph.nodes[i]);
+	for(int i = 0; i<graph.numNodes;i++) printf("%d : %s, \n",i,graph.nodes[i]);
 	printf("\ninitial:\n");
 	for(int i = 0; i<graph.numNodes;i++) printf("%d ",graph.initial[i]);
 	printf("\nfinal:\n");
@@ -73,4 +73,3 @@ bool isTarget(Graph graph, int node){
 char* getNodeName(Graph graph, int node){
 	return graph.nodes[node];
 }
-
