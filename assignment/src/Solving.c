@@ -82,6 +82,7 @@ Z3_ast ValidPath(Z3_context ctx, Graph* graphs, unsigned int numGraphs, int path
            tmp[1] = getNodeVariable(ctx, i, pathLength, pathLength, pathLength);
            kappa3[j] = Z3_mk_and(ctx, 2, tmp);
       }
+      free(kappa3);
       kappa1[i]=Z3_mk_or(ctx, pathLength, kappa2);
       free(kappa2);
   }
